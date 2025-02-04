@@ -3,10 +3,8 @@
 #include<chrono>
 #include "SimpleVector.h"
 
-using namespace std;
-
 int main() {
-    const size_t SIZE = 1000000; // Size of the data structures
+    const int SIZE = 100000000; // Size of the data structures
 
     // Create STL vector and SimpleVector with the same size
     std::vector<int> stlVector(SIZE);
@@ -20,16 +18,16 @@ int main() {
 
     // Measure access time for STL vector
     clock_t start = clock();
-    for (size_t i = 0; i < SIZE; ++i) {
-        volatile int value = stlVector[i]; // Access element
+    for (int i = 0; i < SIZE; i++) {
+        int value = stlVector[i]; // Access element
     }
     clock_t end = clock();
     double stlTime = double(end - start) / CLOCKS_PER_SEC;
 
     // Measure access time for SimpleVector
     start = clock();
-    for (size_t i = 0; i < SIZE; ++i) {
-        volatile int value = simpleVector[i]; // Access element
+    for (int i = 0; i < SIZE; i++) {
+        int value = simpleVector[i]; // Access element
     }
     end = clock();
     double simpleTime = double(end - start) / CLOCKS_PER_SEC;
