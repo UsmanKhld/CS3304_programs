@@ -6,41 +6,37 @@
 using namespace std;
 
 int main() {
-    int size = 1000000;
-    SimpleVector<int> nums(size);
-    vector<int> stlNums(size);
+    const size_t SIZE = 1000000; // Size of the data structures
 
-    for (int i = 0; i < size; i++) {
-        stlNums[i] = i;
-        nums[i] = i;
+    // Create STL vector and SimpleVector with the same size
+    std::vector<int> stlVector(SIZE);
+    SimpleVector<int> simpleVector(SIZE);
+
+    // Initialize both vectors with the same values
+    for (size_t i = 0; i < SIZE; ++i) {
+        stlVector[i] = i;
+        simpleVector[i] = i;
     }
 
-    auto start = chrono::high_resolution_clock::now();
-
-    int sum = 0;
-    for (int i = 0; i < size; i++) {
-        sum += nums[i];
+    // Measure access time for STL vector
+    clock_t start = clock();
+    for (size_t i = 0; i < SIZE; ++i) {
+        volatile int value = stlVector[i]; // Access element
     }
+    clock_t end = clock();
+    double stlTime = double(end - start) / CLOCKS_PER_SEC;
 
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-
-    cout << "Simple Vector duration in nanoseconds: " << duration.count() << endl;
-
-    cout << endl;
-
-
-    auto startSTL = chrono::high_resolution_clock::now();
-
-    sum = 0;
-    for (int i = 0; i < size; i++) {
-        sum += stlNums[i];
+    // Measure access time for SimpleVector
+    start = clock();
+    for (size_t i = 0; i < SIZE; ++i) {
+        volatile int value = simpleVector[i]; // Access element
     }
+    end = clock();
+    double simpleTime = double(end - start) / CLOCKS_PER_SEC;
 
-    auto endSTL = chrono::high_resolution_clock::now();
-    auto durationSTL = chrono::duration_cast<chrono::nanoseconds>(endSTL - startSTL);
-
-    cout << "STL Vector duration in nanoseconds: " << durationSTL.count() << endl;
+    // Output results
+    std::cout << "STL Vector access time: " << stlTime << " seconds" << std::endl;
+    std::cout << "SimpleVector access time: " << simpleTime << " seconds" << std::endl;
 
     return 0;
 }
